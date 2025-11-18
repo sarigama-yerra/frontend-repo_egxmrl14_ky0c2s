@@ -48,12 +48,12 @@ function App() {
                 A modern Buy Here Pay Here dealership system with glass morphism UI and buttery GSAP animations.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link to="#" className="px-5 py-2.5 rounded-xl" style={{ background: accent, color: '#0a0e14' }}>
+                <Link to="/login" className="px-5 py-2.5 rounded-xl" style={{ background: accent, color: '#0a0e14' }}>
                   Sign in to continue
                 </Link>
-                <Link to="/test" className="px-5 py-2.5 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">
+                <a href="/test" className="px-5 py-2.5 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">
                   Backend test
-                </Link>
+                </a>
               </div>
             </div>
           </div>
