@@ -1,71 +1,86 @@
-function App() {
+import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
+import Spline from '@splinetool/react-spline'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+const bg = '#0a0e14'
+const text = '#e5e7eb'
+const accent = '#ff6b35'
+
+function MetricCard({ label, value }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
+    <div className="metric-card rounded-2xl p-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300">
+      <div className="text-sm text-slate-300/80">{label}</div>
+      <div className="mt-2 text-3xl font-semibold" style={{color: text}}>{value}</div>
+    </div>
+  )
+}
 
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
-            </div>
+function App() {
+  const containerRef = useRef(null)
 
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from('.metric-card', { opacity: 0, y: 20, stagger: 0.1, duration: 0.6, ease: 'power2.out' })
+      gsap.from('.chart', {
+        scrollTrigger: { trigger: '.chart', start: 'top 80%' },
+        opacity: 0, y: 50, duration: 0.8, ease: 'power2.out'
+      })
+    }, containerRef)
+    return () => ctx.revert()
+  }, [])
 
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
-          </div>
-
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
+  return (
+    <div ref={containerRef} className="min-h-screen" style={{ background: bg, color: text }}>
+      <div className="relative h-[60vh] overflow-hidden">
+        <Spline scene="https://prod.spline.design/41MGRk-UDPKO-l6W/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e14] via-[#0a0e14]/40 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 flex items-end md:items-center">
+          <div className="px-6 md:px-12 w-full">
+            <div className="max-w-5xl mx-auto">
+              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight" style={{ color: text }}>
+                BBB Auto Sales DMS
+              </h1>
+              <p className="mt-4 text-slate-300/90 md:text-lg max-w-2xl">
+                A modern Buy Here Pay Here dealership system with glass morphism UI and buttery GSAP animations.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link to="#" className="px-5 py-2.5 rounded-xl" style={{ background: accent, color: '#0a0e14' }}>
+                  Sign in to continue
+                </Link>
+                <Link to="/test" className="px-5 py-2.5 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15">
+                  Backend test
+                </Link>
               </div>
             </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
           </div>
         </div>
       </div>
+
+      <section className="px-6 md:px-12 py-12">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <MetricCard label="YTD Sales" value="—" />
+          <MetricCard label="Inventory Count" value="—" />
+          <MetricCard label="Weekly Collections" value="$—" />
+          <MetricCard label="Delinquency Rate" value="—%" />
+        </div>
+      </section>
+
+      <section className="px-6 md:px-12 py-8">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
+          <div className="chart rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 h-72" />
+          <div className="chart rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 h-72" />
+        </div>
+      </section>
+
+      <footer className="px-6 md:px-12 py-12">
+        <div className="max-w-6xl mx-auto text-slate-400/80 text-sm">
+          Built with GSAP, glass morphism, and love. Accent color {accent}.
+        </div>
+      </footer>
     </div>
   )
 }
